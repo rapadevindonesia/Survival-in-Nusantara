@@ -10,6 +10,10 @@ fireImage.src = "assets/api.png";
 const appleImage = new Image();
 appleImage.src = "assets/apel.png";
 
+// ===== LOAD SUARA =====
+const eatSound = new Audio("assets/eat.mp3");
+const pickupSound = new Audio("assets/pickup.mp3");
+const hitSound = new Audio("assets/hit.mp3");
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
