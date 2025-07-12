@@ -1,0 +1,27 @@
+body {
+  margin: 0;
+  background: #111;
+  overflow: hidden;
+  font-family: monospace;
+}
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.controls {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+button {
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #eee;
+}
