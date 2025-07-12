@@ -1,3 +1,15 @@
+const characterImage = new Image();
+characterImage.src = "assets/rapa.png";
+
+const enemyImage = new Image();
+enemyImage.src = "assets/badawang.png";
+
+const fireImage = new Image();
+fireImage.src = "assets/api.png";
+
+const appleImage = new Image();
+appleImage.src = "assets/apel.png";
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
