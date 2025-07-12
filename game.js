@@ -1,21 +1,60 @@
-const characterImage = new Image();
-characterImage.src = "assets/rapa.png";
+// === LOAD GAMBAR ===
+const rapaImg = new Image();
+rapaImg.src = "assets/rapa.png";
 
-const enemyImage = new Image();
-enemyImage.src = "assets/badawang.png";
+const enemyImg = new Image();
+enemyImg.src = "assets/badawang.png";
 
-const fireImage = new Image();
-fireImage.src = "assets/api.png";
+const appleImg = new Image();
+appleImg.src = "assets/apel.png";
 
-const appleImage = new Image();
-appleImage.src = "assets/apel.png";
-
-// ===== LOAD SUARA =====
+// === LOAD SUARA ===
 const eatSound = new Audio("assets/eat.mp3");
-const pickupSound = new Audio("assets/pickup.mp3");
 const hitSound = new Audio("assets/hit.mp3");
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
+
+// === PLAYER, MUSUH, APEL ===
+const player = { x: 50, y: 50, size: 32 };
+const enemy = { x: 200, y: 100, size: 32 };
+const apple = { x: 150, y: 150, size: 24, active: true };
+
+// === COLLISION FUNCTION ===
+function isColliding(a, b) {
+  return (
+    a.x < b.x + b.size &&
+    a.x + a.size > b.x &&
+    a.y < b.y + b.size &&
+    a.y + a.size > b.y
+  );
+}
+
+// === UPDATE GAME ===
+function updateGame() {
+  // Cek tabrakan dengan apel
+  if (apple.active && isColliding(player, apple)) {
+    eatSound.play();
+    apple.active = false;
+  }
+
+  // Cek tabrakan dengan musuh
+  if (isColliding(player, enemy)) {
+    hitSound.play();
+  }
+}
+
+// === GAMBAR ===
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(rapaImg, player.x, player.y, player.size, player.size);
+  ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.size, enemy.size);
+  if (apple.active) {
+    ctx.drawImage(appleImg, apple.x, apple.y, apple.size, apple.size);
+  }
+
+  updateGame();
+  requestAnimationFrame(draw);
+}
+
+draw();
 
 function resize() {
   canvas.width = window.innerWidth;
