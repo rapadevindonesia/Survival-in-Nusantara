@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,9 +48,7 @@
 </head>
 <body>
   <h1>Survival in Nusantara</h1>
-  <canvas id="gc" width="480" height="320"></canvas>
-
-  <div class="btn-container">
+  <canvas id="gc" width="480" height="320"></canvas>  <div class="btn-container">
     <div class="move-buttons">
       <button id="up">⬆️</button>
     </div>
@@ -59,15 +56,27 @@
       <button id="left">⬅️</button>
       <button id="down">⬇️</button>
       <button id="right">➡️</button>
-    </div>
+    </div><div class="action-buttons">
+  <button id="attack">Serang</button>
+  <button id="eat">Makan</button>
+  <button id="fire">Api</button>
+</div>
 
-    <div class="action-buttons">
-      <button id="attack">Serang</button>
-      <button id="eat">Makan</button>
-      <button id="fire">Api</button>
-    </div>
-  </div>
+  </div>  <script>
+    const keys = {};
 
-  <script src="game.js"></script>
-</body>
+    document.getElementById("up").ontouchstart = () => keys["ArrowUp"] = true;
+    document.getElementById("down").ontouchstart = () => keys["ArrowDown"] = true;
+    document.getElementById("left").ontouchstart = () => keys["ArrowLeft"] = true;
+    document.getElementById("right").ontouchstart = () => keys["ArrowRight"] = true;
+
+    document.getElementById("up").ontouchend = () => keys["ArrowUp"] = false;
+    document.getElementById("down").ontouchend = () => keys["ArrowDown"] = false;
+    document.getElementById("left").ontouchend = () => keys["ArrowLeft"] = false;
+    document.getElementById("right").ontouchend = () => keys["ArrowRight"] = false;
+
+    document.getElementById("attack").addEventListener("click", () => alert("Serang!"));
+    document.getElementById("eat").addEventListener("click", () => alert("Makan!"));
+    document.getElementById("fire").addEventListener("click", () => alert("Nyalakan api!"));
+  </script>  <script src="game.js"></script></body>
 </html>
