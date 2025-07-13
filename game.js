@@ -92,3 +92,5 @@ const totalImages = 4;
     if (imagesLoaded === totalImages) gameLoop();
   };
 });
+// Mulai loop game
+requestAnimationFrame(draw);
