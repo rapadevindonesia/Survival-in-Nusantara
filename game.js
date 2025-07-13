@@ -1,104 +1,34 @@
-const canvas = document.getElementById("gc");
-const ctx = canvas.getContext("2d");
+// === GAME STATE === const canvas = document.getElementById("gc"); const ctx = canvas.getContext("2d");
 
-// === GAMBAR ===
-const rapaImg = new Image();
-rapaImg.src = "assets/rapa.png";
+const playerImg = new Image(); playerImg.src = "assets/rapa.png";
 
-const badawangImg = new Image();
-badawangImg.src = "assets/badawang.png";
+const enemyImg = new Image(); enemyImg.src = "assets/badawang.png";
 
-const apelImg = new Image();
-apelImg.src = "assets/apel.png";
+const appleImg = new Image(); appleImg.src = "assets/apple.png";
 
-const fireImg = new Image();
-fireImg.src = "assets/fire.png";
+const fireImg = new Image(); fireImg.src = "assets/fire.png";
 
-let imagesLoaded = 0;
-const totalImages = 4;
+let player = { x: 50, y: 50, w: 32, h: 32, hp: 100 }; let enemy = { x: 300, y: 200, w: 32, h: 32, hp: 100 }; let apple = { x: 150, y: 120, active: true }; let fire = { x: 220, y: 180, active: false };
 
-function checkImagesLoaded() {
-  imagesLoaded++;
-  if (imagesLoaded === totalImages) {
-    requestAnimationFrame(gameLoop);
-  }
-}
+const keys = {};
 
-rapaImg.onload = checkImagesLoaded;
-badawangImg.onload = checkImagesLoaded;
-apelImg.onload = checkImagesLoaded;
-fireImg.onload = checkImagesLoaded;
+document.addEventListener("keydown", (e) => (keys[e.key] = true)); document.addEventListener("keyup", (e) => (keys[e.key] = false));
 
-// === SUARA ===
-const eatSound = new Audio("assets/eat.mp3");
-const hitSound = new Audio("assets/hit.mp3");
+function movePlayer() { if (keys["ArrowUp"]) player.y -= 2; if (keys["ArrowDown"]) player.y += 2; if (keys["ArrowLeft"]) player.x -= 2; if (keys["ArrowRight"]) player.x += 2; }
 
-// === OBJEK ===
-const player = { x: 50, y: 50, size: 32 };
-const enemy = { x: 200, y: 100, size: 32 };
-const apple = { x: 150, y: 150, size: 24, active: true };
-const fire = { x: 100, y: 200, size: 32 };
+function drawSprite(img, x, y, w = 32, h = 32) { ctx.drawImage(img, x, y, w, h); }
 
-// === TOMBOL GERAK ===
-let keys = {};
-document.addEventListener("keydown", e => keys[e.key] = true);
-document.addEventListener("keyup", e => keys[e.key] = false);
+function drawGame() { ctx.clearRect(0, 0, canvas.width, canvas.height); drawSprite(playerImg, player.x, player.y); drawSprite(enemyImg, enemy.x, enemy.y); if (apple.active) drawSprite(appleImg, apple.x, apple.y); if (fire.active) drawSprite(fireImg, fire.x, fire.y);
 
-// === DETEKSI TABRAKAN ===
-function isColliding(a, b) {
-  return (
-    a.x < b.x + b.size &&
-    a.x + a.size > b.x &&
-    a.y < b.y + b.size &&
-    a.y + a.size > b.y
-  );
-}
+// HP Bar ctx.fillStyle = "lime"; ctx.fillRect(10, 10, player.hp * 2, 10); ctx.strokeStyle = "white"; ctx.strokeRect(10, 10, 200, 10); }
 
-// === UPDATE GAME ===
-function updateGame() {
-  if (keys["ArrowUp"]) player.y -= 2;
-  if (keys["ArrowDown"]) player.y += 2;
-  if (keys["ArrowLeft"]) player.x -= 2;
-  if (keys["ArrowRight"]) player.x += 2;
+function gameLoop() { movePlayer(); drawGame(); requestAnimationFrame(gameLoop); }
 
-  if (apple.active && isColliding(player, apple)) {
-    eatSound.play();
-    apple.active = false;
-  }
+requestAnimationFrame(gameLoop);
 
-  if (isColliding(player, enemy)) {
-    hitSound.play();
-  }
-}
+// === ACTION BUTTONS === function attackEnemy() { const dx = Math.abs(player.x - enemy.x); const dy = Math.abs(player.y - enemy.y); if (dx < 40 && dy < 40 && enemy.hp > 0) { enemy.hp -= 10; console.log("Serangan berhasil! HP musuh:", enemy.hp); } else { console.log("Terlalu jauh untuk menyerang!"); } }
 
-// === DRAW ===
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function eatFood() { const dx = Math.abs(player.x - apple.x); const dy = Math.abs(player.y - apple.y); if (apple.active && dx < 32 && dy < 32) { player.hp = Math.min(player.hp + 20, 100); apple.active = false; console.log("Makan apel! HP sekarang:", player.hp); } else { console.log("Gak ada apel di dekatmu!"); } }
 
-  // Gambar semua objek
-  ctx.drawImage(rapaImg, player.x, player.y, player.size, player.size);
-  ctx.drawImage(badawangImg, enemy.x, enemy.y, enemy.size, enemy.size);
-  ctx.drawImage(fireImg, fire.x, fire.y, fire.size, fire.size);
+function makeFire() { const dx = Math.abs(player.x - fire.x); const dy = Math.abs(player.y - fire.y); if (!fire.active && dx < 40 && dy < 40) { fire.active = true; console.log("Api unggun dinyalakan!"); } else { console.log("Udah nyala atau kamu terlalu jauh!"); } }
 
-  if (apple.active) {
-    ctx.drawImage(apelImg, apple.x, apple.y, apple.size, apple.size);
-  }
-
-  updateGame();
-  requestAnimationFrame(draw);
-}
-
-let imagesLoaded = 0;
-const totalImages = 4;
-
-function checkImagesLoaded() {
-  imagesLoaded++;
-  if (imagesLoaded === totalImages) {
-    draw(); // Mulai game
-  }
-}
-
-rapaImg.onload = checkImagesLoaded;
-badawangImg.onload = checkImagesLoaded;
-apelImg.onload = checkImagesLoaded;
-fireImg.onload = checkImagesLoaded;
