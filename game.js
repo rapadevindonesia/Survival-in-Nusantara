@@ -88,4 +88,17 @@ function draw() {
   requestAnimationFrame(draw);
 }
 
-draw();
+let imagesLoaded = 0;
+const totalImages = 4;
+
+function checkImagesLoaded() {
+  imagesLoaded++;
+  if (imagesLoaded === totalImages) {
+    draw(); // Mulai game
+  }
+}
+
+rapaImg.onload = checkImagesLoaded;
+badawangImg.onload = checkImagesLoaded;
+apelImg.onload = checkImagesLoaded;
+fireImg.onload = checkImagesLoaded;
