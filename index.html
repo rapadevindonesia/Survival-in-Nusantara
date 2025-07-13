@@ -8,17 +8,22 @@
 </head>
 <body>
   <h1>Survival in Nusantara</h1>
-  <canvas id="gc" width="400" height="300"></canvas>
+  <canvas id="gc" width="320" height="240"></canvas>
 
-  <!-- Tombol -->
   <div class="controls">
-    <button id="up">⬆️</button><br />
-    <button id="left">⬅️</button>
-    <button id="down">⬇️</button>
-    <button id="right">➡️</button><br />
-    <button id="attack">Serang</button>
-    <button id="eat">Makan</button>
-    <button id="fire">Api</button>
+    <div class="arrow-row">
+      <button id="up">⬆️</button>
+    </div>
+    <div class="arrow-row">
+      <button id="left">⬅️</button>
+      <button id="down">⬇️</button>
+      <button id="right">➡️</button>
+    </div>
+    <div class="action-row">
+      <button id="attack">Serang</button>
+      <button id="eat">Makan</button>
+      <button id="fire">Api</button>
+    </div>
   </div>
 
   <script src="game.js"></script>
