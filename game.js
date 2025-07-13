@@ -12,7 +12,7 @@ const apelImg = new Image();
 apelImg.src = "assets/apel.png";
 
 const fireImg = new Image();
-fireImg.src = "assets/api.png";
+fireImg.src = "assets/fire.png";
 
 // === SUARA ===
 const eatSound = new Audio("assets/eat.mp3");
