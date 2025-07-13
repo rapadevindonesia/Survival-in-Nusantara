@@ -14,6 +14,21 @@ apelImg.src = "assets/apel.png";
 const fireImg = new Image();
 fireImg.src = "assets/fire.png";
 
+let imagesLoaded = 0;
+const totalImages = 4;
+
+function checkImagesLoaded() {
+  imagesLoaded++;
+  if (imagesLoaded === totalImages) {
+    requestAnimationFrame(gameLoop);
+  }
+}
+
+rapaImg.onload = checkImagesLoaded;
+badawangImg.onload = checkImagesLoaded;
+apelImg.onload = checkImagesLoaded;
+fireImg.onload = checkImagesLoaded;
+
 // === SUARA ===
 const eatSound = new Audio("assets/eat.mp3");
 const hitSound = new Audio("assets/hit.mp3");
