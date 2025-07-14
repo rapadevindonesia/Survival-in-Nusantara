@@ -4,111 +4,69 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// === Control ===
 let keys = {};
 document.addEventListener("keydown", (e) => keys[e.key] = true);
 document.addEventListener("keyup", (e) => keys[e.key] = false);
 
-// Load images
+// === Gambar ===
 const playerImg = new Image();
 playerImg.src = "rapa.png";
+
 const enemyImg = new Image();
 enemyImg.src = "badawang.png";
-const fireImg = new Image();
-fireImg.src = "fire.png";
 
-// Player
+// === Objek ===
 let player = {
   x: 100,
   y: 100,
-  speed: 2.5,
-  width: 64,
-  height: 64,
-  inventory: [],
-  hunger: 100,
-  nearFire: false,
+  speed: 3,
+  size: 64,
 };
 
-// Musuh (Badawang)
 let enemy = {
   x: 400,
   y: 300,
-  speed: 1.0,
-  width: 64,
-  height: 64,
+  speed: 1.5,
+  size: 64,
 };
 
-// Api unggun
-let fire = {
-  x: 200,
-  y: 200,
-  active: true,
-};
-
-// Waktu
-let time = 0;
-let isNight = false;
-
+// === Update Loop ===
 function update() {
-  // Gerak Rapa
+  // Kontrol Rapa
   if (keys["ArrowUp"]) player.y -= player.speed;
   if (keys["ArrowDown"]) player.y += player.speed;
   if (keys["ArrowLeft"]) player.x -= player.speed;
   if (keys["ArrowRight"]) player.x += player.speed;
 
-  // Gerak Badawang ke arah Rapa
-  const dx = player.x - enemy.x;
-  const dy = player.y - enemy.y;
-  const distance = Math.hypot(dx, dy);
-  if (distance > 1) {
-    enemy.x += (dx / distance) * enemy.speed;
-    enemy.y += (dy / distance) * enemy.speed;
+  // Gerakin Badawang ke arah Rapa
+  let dx = player.x - enemy.x;
+  let dy = player.y - enemy.y;
+  let dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist > 1) {
+    enemy.x += (dx / dist) * enemy.speed;
+    enemy.y += (dy / dist) * enemy.speed;
   }
-
-  // Hunger berkurang
-  if (time % 100 === 0) player.hunger -= 1;
-  if (player.hunger <= 0) player.hunger = 0;
-
-  // Cek dekat api
-  player.nearFire = (
-    player.x < fire.x + 50 &&
-    player.x + player.width > fire.x &&
-    player.y < fire.y + 50 &&
-    player.y + player.height > fire.y
-  );
-
-  // Siang malam
-  time++;
-  if (time % 1000 === 0) isNight = !isNight;
 }
 
+// === Gambar Loop ===
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Background
-  ctx.fillStyle = isNight ? "#00111a" : "#87CEEB";
+  // Latar
+  ctx.fillStyle = "#444";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Api unggun
-  if (fire.active) {
-    ctx.drawImage(fireImg, fire.x, fire.y, 50, 50);
-  }
-
-  // Gambar Rapa & Badawang
-  ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
-  ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
-
-  // UI
-  ctx.fillStyle = "white";
-  ctx.font = "16px Arial";
-  ctx.fillText("Hunger: " + player.hunger, 20, 30);
-  ctx.fillText("Time: " + (isNight ? "Night" : "Day"), 20, 50);
-  if (player.nearFire) ctx.fillText("Near Fire: Warm", 20, 70);
+  // Gambar karakter
+  ctx.drawImage(playerImg, player.x, player.y, player.size, player.size);
+  ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.size, enemy.size);
 }
 
-function gameLoop() {
+// === Game Loop ===
+function loop() {
   update();
   draw();
-  requestAnimationFrame(gameLoop);
+  requestAnimationFrame(loop);
 }
 
-gameLoop();
+loop();
